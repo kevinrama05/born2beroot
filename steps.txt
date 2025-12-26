@@ -1,0 +1,32 @@
+1. Setup SSH
+- nano /etc/sshd_config
+- systemctl restart ssh
+2. Setup Firewall using ufw
+- apt install ufw
+- apt install sudo
+- sudo ufw default deny incoming
+- sudo ufw default allow outgoing
+- ufw allow 4242
+- ufw enable
+3. Setup sudo
+- Add the text below:
+Defaults requiretty
+Defaults badpass_message="WRONG PASSWORD"
+Defaults logfile="/var/log/sudo/sudo.log"
+Defaults log_input
+Defaults log_output
+Defaults iolog_dir=/var/log/sudo
+Defaults passwd_tries=3
+4. Setup groups
+- groupadd user42
+- usermod -a -G user42,sudo kerama
+5. Password policy
+- vi /etc/login.defs
+- Change the kerama and root users also
+- apt install libpam-pwquality
+- password        requisite                       pam_pwquality.so retry=3 minlen=10 difok=7 maxrepeat=3 dcredit=-1 ucredit=-1 lcredit=-1 reject_username enforce_for_root
+- Change the passwords
+6. Monitoring script
+- apt install bc sysstat
+- crontab -e
+- */10 * * * * bash /etc/cron.d/monitoring.sh | wall
